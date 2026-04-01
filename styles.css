@@ -795,6 +795,46 @@ tbody tr:hover { background: rgba(75, 46, 131, 0.02); }
 }
 
 /* ===== CITATION ===== */
+.baseline-quote {
+  margin: 0 auto 40px;
+  max-width: 840px;
+  padding: 8px 0 4px;
+  text-align: center;
+}
+
+.baseline-quote blockquote p {
+  font-family: 'Lora', Georgia, serif;
+  font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.7;
+  color: var(--text);
+}
+
+.baseline-quote cite {
+  display: block;
+  margin-top: 24px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.baseline-quote a {
+  color: var(--primary);
+  text-decoration: none;
+  word-break: break-all;
+}
+
+.baseline-quote a:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .citation-block > p {
   font-size: 1rem;
   font-weight: 300;
