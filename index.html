@@ -446,6 +446,15 @@
               </svg>
               Download Link
             </a>
+            <button class="btn btn-review btn-lg" id="reviewAccessTrigger" type="button">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                <line x1="12" y1="9" x2="12" y2="13" />
+                <line x1="12" y1="17" x2="12.01" y2="17" />
+              </svg>
+              Access During Review
+            </button>
           </div>
         </div>
       </div>
@@ -482,6 +491,36 @@
       <polyline points="18 15 12 9 6 15" />
     </svg>
   </button>
+
+  <div class="review-modal" id="reviewModal" aria-hidden="true">
+    <div class="review-modal-backdrop" data-review-close></div>
+    <section class="review-modal-panel" role="dialog" aria-modal="true" aria-labelledby="reviewModalTitle">
+      <button class="review-modal-close" id="reviewModalClose" type="button" aria-label="Close reviewer access panel">
+        <span></span><span></span>
+      </button>
+      <p class="review-modal-eyebrow">Anonymous Review Access</p>
+      <h2 id="reviewModalTitle">Reviewer Access Links</h2>
+      <p class="review-modal-desc">This interface is available only during the ACM MM Dataset Track review period. The ZIP extraction password is <strong><em><span class="review-password">njmubme</span></em></strong>. After this review cycle is completed, access will be available only through the application process. If you are not a relevant reviewer or organizer, please request the dataset through the application form.</p>
+
+      <div class="review-link-list">
+        <a class="review-link-card" href="https://drive.google.com/file/d/1XWnLErcly91h38jEz1Tiu5VyPkJwdjyz/view?usp=drive_link" target="_blank" rel="noopener noreferrer">
+          <img src="googledrive.png" alt="Google Drive logo">
+          <div class="review-link-copy">
+            <strong>Google Drive</strong>
+            <span>Download link</span>
+          </div>
+        </a>
+
+        <a class="review-link-card" href="https://pan.baidu.com/s/1Al94lme9o3qhwptEyGzpYQ" target="_blank" rel="noopener noreferrer">
+          <img src="baiduyun.png" alt="Baidu Yun logo">
+          <div class="review-link-copy">
+            <strong>Baidu Yun</strong>
+            <span>CogPic.zip | Access code: <em>njmu</em></span>
+          </div>
+        </a>
+      </div>
+    </section>
+  </div>
 
   <script src="script.js"></script>
 </body>

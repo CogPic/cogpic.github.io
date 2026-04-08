@@ -157,9 +157,48 @@ function animateCounters() {
   statItems.forEach((el) => observer.observe(el));
 }
 
+// ===== Reviewer access modal =====
+function initReviewModal() {
+  const modal = document.getElementById("reviewModal");
+  const trigger = document.getElementById("reviewAccessTrigger");
+  const closeButton = document.getElementById("reviewModalClose");
+  const closeTargets = document.querySelectorAll("[data-review-close]");
+
+  if (!modal || !trigger || !closeButton) {
+    return;
+  }
+
+  const setModalState = (isOpen) => {
+    modal.classList.toggle("is-open", isOpen);
+    modal.setAttribute("aria-hidden", String(!isOpen));
+    document.body.style.overflow = isOpen ? "hidden" : "";
+  };
+
+  trigger.addEventListener("click", () => {
+    setModalState(true);
+  });
+
+  closeButton.addEventListener("click", () => {
+    setModalState(false);
+  });
+
+  closeTargets.forEach((target) => {
+    target.addEventListener("click", () => {
+      setModalState(false);
+    });
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && modal.classList.contains("is-open")) {
+      setModalState(false);
+    }
+  });
+}
+
 // ===== Init =====
 document.addEventListener("DOMContentLoaded", () => {
   addStaggeredDelay();
   initScrollAnimations();
   animateCounters();
+  initReviewModal();
 });
