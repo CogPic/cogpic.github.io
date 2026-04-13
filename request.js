@@ -50,6 +50,8 @@ function buildPdfFromJpeg(jpegBytes, width, height) {
   const parts = [];
   const offsets = [0];
   let position = 0;
+  const pdfWidth = 595;
+  const pdfHeight = Math.round((height / width) * pdfWidth);
 
   const pushString = (value) => {
     const bytes = encoder.encode(value);
@@ -68,12 +70,12 @@ function buildPdfFromJpeg(jpegBytes, width, height) {
   offsets.push(position);
   pushString("2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n");
   offsets.push(position);
-  pushString("3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /XObject << /Im0 4 0 R >> >> /Contents 5 0 R >>\nendobj\n");
+  pushString(`3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pdfWidth} ${pdfHeight}] /Resources << /XObject << /Im0 4 0 R >> >> /Contents 5 0 R >>\nendobj\n`);
   offsets.push(position);
   pushString(`4 0 obj\n<< /Type /XObject /Subtype /Image /Width ${width} /Height ${height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${jpegBytes.length} >>\nstream\n`);
   pushBytes(jpegBytes);
   pushString("\nendstream\nendobj\n");
-  const contentStream = "q\n595 0 0 842 0 0 cm\n/Im0 Do\nQ\n";
+  const contentStream = `q\n${pdfWidth} 0 0 ${pdfHeight} 0 0 cm\n/Im0 Do\nQ\n`;
   const contentBytes = encoder.encode(contentStream);
   offsets.push(position);
   pushString(`5 0 obj\n<< /Length ${contentBytes.length} >>\nstream\n${contentStream}endstream\nendobj\n`);
@@ -119,7 +121,7 @@ function drawCheckbox(ctx, x, y) {
 function renderApplicationCanvas(formData) {
   const canvas = document.createElement("canvas");
   canvas.width = 1240;
-  canvas.height = 1754;
+  canvas.height = 2500;
 
   const ctx = canvas.getContext("2d");
   ctx.fillStyle = "#ffffff";
@@ -162,6 +164,32 @@ function renderApplicationCanvas(formData) {
     y += Math.max(58, lines.length * 30 + 20);
   });
 
+  if (formData.researchPurpose) {
+    y += 16;
+    ctx.fillStyle = "#222222";
+    ctx.font = "600 21px Montserrat, Arial, sans-serif";
+    ctx.fillText("Research Purpose and Detailed Request", leftLabelX, y);
+
+    const purposeBoxTop = y + 18;
+    const purposeBoxHeight = 180;
+    ctx.save();
+    ctx.strokeStyle = "#cfd4df";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(leftLabelX, purposeBoxTop, valueRight - leftLabelX, purposeBoxHeight);
+    ctx.restore();
+
+    ctx.fillStyle = "#1098e6";
+    ctx.font = "500 21px Montserrat, Arial, sans-serif";
+    const purposeLines = wrapText(ctx, formData.researchPurpose, valueRight - leftLabelX - 36);
+    purposeLines.forEach((line, index) => {
+      if (index < 5) {
+        ctx.fillText(line, leftLabelX + 18, purposeBoxTop + 34 + index * 30);
+      }
+    });
+
+    y = purposeBoxTop + purposeBoxHeight + 28;
+  }
+
   y += 30;
   ctx.fillStyle = "#111111";
   ctx.font = "700 26px Montserrat, Arial, sans-serif";
@@ -169,9 +197,14 @@ function renderApplicationCanvas(formData) {
 
   const agreements = [
     "I have read and agree to the terms and conditions listed on the CogPic database website.",
-    "This database is for research purposes only.",
-    "I will not provide any part of this database to any third party.",
-    "I will not sell any part of this database or use it for profit.",
+    "The CogPic database will be used for research purposes only.",
+    "I will not share, transfer, distribute, or provide any part of this database to any third party who is not explicitly approved under this application.",
+    "I will not sell any part of this database, use it for commercial purposes, or use it for any profit-making activity.",
+    "I will not attempt to identify or re-identify any participant represented in the database.",
+    "I will restrict access to the database to the approved members of my research team only.",
+    "I will store the database securely and take reasonable measures to prevent unauthorized access or disclosure.",
+    "I will not publicly post or display raw data or identifiable samples from the database without prior written permission.",
+    "I understand that access may be revoked if these terms are violated.",
   ];
 
   y += 44;
@@ -294,6 +327,7 @@ if (requestForm && submitApplication) {
       researcher2: requestForm.elements.researcher_2.value.trim(),
       researcher3: requestForm.elements.researcher_3.value.trim(),
       researcher4: requestForm.elements.researcher_4.value.trim(),
+      researchPurpose: requestForm.elements.research_purpose.value.trim(),
       submissionDate: formattedDate,
     };
 
